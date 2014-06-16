@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title> Playing with d3</title>
+   <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+</head>
+<body>
+    <script>
+        var data = [10, 50, 80, 40]; // info that we need to append to the chart
+        var r = 100; // raduis for the circle or I call it donuts
+        var color = d3.scale.ordinal()
+                  .range(["red", "green", "orange","blue"]);
+        var canvas = d3.select("body").append("svg")// adding the svg to the html body(this is always the first step )
+               .attr("width", 1500)
+               .attr("height", 1500);
+
+        var group = canvas.append("g")
+                        .attr("transform", "translate(400, 300)");
+
+        var arc = d3.svg.arc() //create the arcs
+                   .innerRadius(200) //the inside circle
+                   .outerRadius(r);
+        var pie = d3.layout.pie() // this will create what i called pie chart and an object for each element
+                   .value(function (d) { return d;});
+
+        var arcs = group.selectAll(".arc") // bind(link) our data to our elements
+                    .data(pie(data))
+                    .enter()
+                    .append("g")  //we append a group for each element
+                    .attr("class", "arc"); // every group of element has a class of arc
+
+        arcs.append("path")  // appending a path for each element's object to be showing in the page
+              .attr("d", arc)
+              .attr("fill", function (d) {return color(d.data); });
+
+        arcs.append("text") // pass the text to the chart (labels)
+              .attr("transform", function (d) { return "translate("+ arc.centroid(d)+")";}) //set the labels in there position at the chart
+              .attr("text-anchor", "middle")
+              .attr("font-size", "2em")
+              .text(function (d) {return d.data;});
+
+
+    </script>
+
+ </body>
+ </html>

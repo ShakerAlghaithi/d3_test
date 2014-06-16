@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title> Playing with d3</title>
+   <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+</head>
+<body>
+    <script>
+       var canvas = d3.select("body").append("svg")
+                      .attr("width", 500)
+                      .attr("height", 500)
+                      .append("g")
+                          .attr("transform", "translate(50,50)");
+        var tree = d3.layout.tree()
+                      .size([400, 400]);// the size of the tree
+        d3.json("mydata.json", function (data){
+                 var nodes = tree.nodes(data); // this returns an array of all nodes that located in out json file .
+                 var links = tree.links(nodes);// this creates the path between nodes
+                 var node = canvas.selectAll(".node") // get everything in our node file and store it the data arrgument in the line 17
+                        .data(nodes)
+                        .inter()
+                        .append("g") // group the data
+                            .attr("class", "node") // give it class called node
+                            .attr("transform", function (d) {return "translate ("+ d.x + "," + d.y + ")"; })// the node position according to the objects provided
+                node.append("circle") // make the nodes in circle shape
+                      .attr("r", 5) // give them a raduis
+                      .attr("fill", "steelblue");// give the nodes color
+                node.append("text")
+                      .text(function (d) {return d.name; })// append the name to the nodes and select the actual path for the nodes
+                canvas.selectAll(".links")
+                      .data(links)
+                      .enter()
+                      .append ("path")
+                      .attr("class", "link")
+                      attr("fill", " none")
+
+        })
+
+
+
+
+
+
+    </script>
+
+ </body>
+ </html>
